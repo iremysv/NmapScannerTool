@@ -1,21 +1,37 @@
+# 🛡️ NmapScannerTool: Python Tabanlı Ağ Analiz Modülü
 
-# 🛡️ NmapScannerTool: Ağ ve IP Analiz Aracı
+NmapScannerTool, ağ keşfi ve güvenlik denetimi süreçlerini otomatize etmek için geliştirilmiş interaktif bir analiz aracıdır. Ham tarama verilerini, `analiz_motoru.py` üzerinden işleyerek kullanıcıya teknik tavsiyelerle sunar.
 
-Bu proje, Python tabanlı bir otomasyon aracıdır ve hedef sistemler üzerinde temel ağ analizleri gerçekleştirir. İstinye Üniversitesi Bilgisayar Programcılığı vize projesi kapsamında geliştirilmektedir.
+---
 
-## 🚀 Desteklenen Tarama Türleri
+### 🚀 Desteklenen Tarama Türleri
 
-Proje kapsamında aşağıdaki Nmap taramaları otomatikleştirilmiştir:
+Proje kapsamında aşağıdaki Nmap taramaları modüler olarak entegre edilmiştir:
 
-* 🔍 **Standart Tarama:** Hedef IP üzerindeki temel portları tespit eder.
-* ⚙️ **Versiyon Tespiti (-sV):** Çalışan servislerin sürüm bilgilerini görüntüler.
-* 💻 **OS Analizi (-O):** Hedef cihazın işletim sistemi tahminlerini listeler.
-* ⚡ **Hızlı Tarama (-F):** En yaygın portları hızlıca tarar.
-* 📡 **Ping Scan (-sn):** Cihazların aktiflik durumunu kontrol eder.
+* 🔍 **Standart Tarama:** Hedef IP üzerindeki temel portları ve servis durumlarını tespit eder.
+* ⚙️ **Versiyon Tespiti (-sV):** Çalışan servislerin detaylı sürüm bilgilerini görüntüler.
+* 💻 **OS Analizi (-O):** Hedef cihazın işletim sistemi tahminlerini analiz eder ve listeler.
+* ⚡ **Hızlı Tarama (-F):** En yaygın 100 portu hızlıca tarayarak zaman tasarrufu sağlar.
+* 📡 **Ping Scan (-sn):** Cihazların ağ üzerindeki aktiflik durumunu kontrol eder.
+* 🧠 **Akıllı Analiz:** Tespit edilen her port için otomatik güvenlik önerileri üretir.
 
-## 🛠️ Kurulum ve Kullanım
+---
 
-1. Gerekli kütüphaneyi kurun: 
-   ```bash
-   pip3 install colorama
- Ağ Tarama ve Analiz Aracı
+### 📂 Proje Mimarisi
+
+| Dosya Adı | Görev |
+| :--- | :--- |
+| **ScannerTool.py** | Ana kullanıcı arayüzü ve Nmap komut motoru entegrasyonu. |
+| **analiz_motoru.py** | Port bazlı teknik risk analizi ve çözüm önerileri modülü. |
+| **.gitignore** | Gereksiz sistem dosyalarının ve logların izolasyonu. |
+
+---
+
+### 🛠️ Kurulum ve Kullanım
+
+**1. Ön Gereksinim:**
+Sisteminizde **Nmap** kurulu olmalıdır (`sudo apt install nmap` veya `brew install nmap`).
+
+**2. Bağımlılıklar:**
+```bash
+pip3 install colorama
