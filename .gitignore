@@ -1,22 +1,44 @@
-# Python
+# --- Python & Derleme Dosyaları ---
 __pycache__/
 *.py[cod]
 *$py.class
-.venv/
+*.so
+.Python
 env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
 
-# Sistem
-.DS_Store
-Thumbs.db
-
-# IDE
+# --- Sistem ve IDE Dosyaları ---
 .vscode/
 .idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
 
-# Proje Çıktıları (Raporlar)
+# --- GÜVENLİK: KRİTİK DOSYALAR ---
+# Tarama sonuçlarını ve logları ASLA GitHub'a gönderme
 *.log
-ip_scan.log
-site_scan.log
-service_scan.log
-os_scan.log
-ping_scan.log
+*.txt
+*.json
+*.xml
+
+
+# Geçici yedek dosyaları (Nano, Vim veya VS Code yedekleri)
+*.save
+*.bak
+*~
+*.tmp
+
+# Gizli Yapılandırmalar (API Anahtarları, Şifreler)
+.env
+auth.json
+secrets.py
+config_local.py
+
+# --- PROJE ÖZEL ---
+ScannerTool.py.save
+
+
