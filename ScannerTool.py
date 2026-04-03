@@ -5,10 +5,8 @@ def nmap_calistir(komut_listesi, rapor_adi):
     try:
         print(f"\n[+] İşlem başlatıldı: {' '.join(komut_listesi)}")
         sonuc = subprocess.run(komut_listesi, capture_output=True, text=True, check=True)
-        
         with open(f"{rapor_adi}.log", "w", encoding="utf-8") as f:
             f.write(sonuc.stdout)
-            
         print(f"[!] Tarama tamamlandı. Rapor: {rapor_adi}.log")
         return sonuc.stdout
     except Exception as e:
@@ -16,38 +14,40 @@ def nmap_calistir(komut_listesi, rapor_adi):
 
 def ana_menu():
     while True:
-        print("\n" + "="*30)
-        print("   NMAP TARAMA VE ANALİZ ARACI   ")
-        print("="*30)
-        print("1- Hızlı Tarama (-F)")
-        print("2- Detaylı/Agresif Tarama (-A)")
-        print("3- Zafiyet Taraması (Scripts)")
-        print("4- Çıkış")
-        print("="*30)
-        
-        secim = input("\nSeçiminiz: ")
-        
-        if secim == "4":
-            print("[*] Program kapatılıyor...")
+        print("\n" + "="*45)
+        print("      SIZMA TESTİ VE ANALİZ PANELİ      ")
+        print("="*45)
+        print("1- Hızlı Tarama (-F) [Top 100 Port]")
+        print("2- Cihaz Keşfi (-sn) [Ping Scan]")
+        print("3- Servis Versiyon Tespiti (-sV)")
+        print("4- İşletim Sistemi Analizi (-O)")
+        print("5- Agresif Tarama (-A) [Hepsi Bir Arada]")
+        print("6- Zafiyet Taraması (NSE Scripts)")
+        print("7- Çıkış")
+        print("="*45)
+        secim = input("\nSeçiminiz (1-7): ")
+        if secim == "7": 
+            print("[*] Program kapatılıyor. İyi çalışmalar İrem!")
             break
-            
         hedef = input("Hedef IP veya Domain: ")
         if not hedef: continue
-
         if secim == "1":
-            # -F: En yaygın 100 portu çok hızlı tarar
             nmap_calistir(["nmap", "-F", hedef], "hizli_tarama")
         elif secim == "2":
-            # -A: OS tespiti, versiyon tespiti ve script taraması yapar (Çok detaylıdır)
-            print("[!] Bilgi: Bu işlem biraz uzun sürebilir...")
-            nmap_calistir(["nmap", "-A", hedef], "detayli_analiz")
+            nmap_calistir(["nmap", "-sn", hedef], "cihaz_kesfi")
         elif secim == "3":
+            nmap_calistir(["nmap", "-sV", hedef], "servis_analizi")
+        elif secim == "4":
+            nmap_calistir(["sudo", "nmap", "-O", hedef], "os_analizi")
+        elif secim == "5":
+            nmap_calistir(["sudo", "nmap", "-A", hedef], "agresif_tarama")
+        elif secim == "6":
             try:
-                from zafiyet_tarayici import zafiyet_tara
+                from ZafiyetTarayici import zafiyet_tara
                 sonuc = zafiyet_tara(hedef)
                 print(sonuc)
             except ImportError:
-                print("[-] Hata: zafiyet_tarayici.py bulunamadı!")
+                print("[-] Hata: ZafiyetTarayici.py bulunamadı!")
         else:
             print("[-] Geçersiz seçim.")
 
