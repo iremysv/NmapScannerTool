@@ -1,45 +1,55 @@
+# -*- coding: utf-8 -*-
 import subprocess
-import shlex
-import os
 
-def güvenli_komut_çalıştır(komut_listesi, rapor_adi):
-    """
-    shell=True kullanmadan, komutları liste olarak güvenli şekilde çalıştırır.
-    """
+def nmap_calistir(komut_listesi, rapor_adi):
     try:
-        print(f"\n[+] Tarama başlatıldı: {' '.join(komut_listesi)}")
-        # stdout ve stderr'i yakalayarak daha profesyonel çıktı yönetimi sağlar
+        print(f"\n[+] İşlem başlatıldı: {' '.join(komut_listesi)}")
         sonuc = subprocess.run(komut_listesi, capture_output=True, text=True, check=True)
         
-        with open(f"{rapor_adi}.log", "w") as f:
+        with open(f"{rapor_adi}.log", "w", encoding="utf-8") as f:
             f.write(sonuc.stdout)
             
-        print(f"[!] İşlem tamamlandı. Sonuç {rapor_adi}.log dosyasına kaydedildi.")
+        print(f"[!] Tarama tamamlandı. Rapor: {rapor_adi}.log")
         return sonuc.stdout
-    except subprocess.CalledProcessError as e:
-        print(f"[-] Nmap hatası: {e.stderr}")
     except Exception as e:
-        print(f"[-] Beklenmedik hata: {e}")
+        print(f"[-] Hata oluştu: {e}")
 
 def ana_menu():
     while True:
-        print("\n=== Gelişmiş Nmap Analiz Aracı ===")
-        print("1- Standart Tarama\n2- Versiyon Tespiti\n3- Çıkış")
+        print("\n" + "="*30)
+        print("   NMAP TARAMA VE ANALİZ ARACI   ")
+        print("="*30)
+        print("1- Hızlı Tarama (-F)")
+        print("2- Detaylı/Agresif Tarama (-A)")
+        print("3- Zafiyet Taraması (Scripts)")
+        print("4- Çıkış")
+        print("="*30)
         
         secim = input("\nSeçiminiz: ")
-        if secim == "3": break
         
-        hedef = input("Hedef IP (Örn: 192.168.1.1): ")
-        
-        # Basit Input Validation
-        if not hedef.replace(".", "").isalnum():
-            print("[-] Geçersiz hedef formatı!")
-            continue
+        if secim == "4":
+            print("[*] Program kapatılıyor...")
+            break
+            
+        hedef = input("Hedef IP veya Domain: ")
+        if not hedef: continue
 
         if secim == "1":
-            güvenli_komut_çalıştır(["nmap", hedef], "standart_tarama")
+            # -F: En yaygın 100 portu çok hızlı tarar
+            nmap_calistir(["nmap", "-F", hedef], "hizli_tarama")
         elif secim == "2":
-            güvenly_komut_çalıştır(["nmap", "-sV", hedef], "versiyon_tarama")
+            # -A: OS tespiti, versiyon tespiti ve script taraması yapar (Çok detaylıdır)
+            print("[!] Bilgi: Bu işlem biraz uzun sürebilir...")
+            nmap_calistir(["nmap", "-A", hedef], "detayli_analiz")
+        elif secim == "3":
+            try:
+                from zafiyet_tarayici import zafiyet_tara
+                sonuc = zafiyet_tara(hedef)
+                print(sonuc)
+            except ImportError:
+                print("[-] Hata: zafiyet_tarayici.py bulunamadı!")
+        else:
+            print("[-] Geçersiz seçim.")
 
 if __name__ == "__main__":
     ana_menu()
