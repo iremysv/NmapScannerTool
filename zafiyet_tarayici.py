@@ -1,13 +1,19 @@
-# -*- coding: utf-8 -*-
+
 import subprocess
 
-def dizin_tara(target_url):
-    print(f"\n[!] {target_url} için hassas dizin taraması başlatılıyor...")
-    # Basit bir brute force simülasyonu veya nmap script kullanımı
-    # Örnek: nmap --script http-enum
+def zafiyet_tara(hedef):
+    """
+    Nmap Scripting Engine (NSE) kullanarak hedefteki bilinen 
+    zafiyetleri (vulnerabilities) tarar.
+    """
+    print(f"\n[!] {hedef} için kritik zafiyet taraması başlatılıyor...")
+    
+    # --script vuln: Nmap'in en popüler zafiyet tarama kütüphanesidir.
+    # Bu komut; smb-vuln, http-vuln gibi birçok scripti tek seferde çalıştırır.
+    komut = ["nmap", "-sV", "--script=vuln", hedef]
+    
     try:
-        cmd = f"nmap --script http-enum {target_url}"
-        sonuc = subprocess.check_output(cmd, shell=True).decode()
-        return sonuc
-    except:
-        return "Zafiyet taraması sırasında bir hata oluştu."
+        sonuc = subprocess.run(komut, capture_output=True, text=True, check=True)
+        return sonuc.stdout
+    except Exception as e:
+        return f"[-] Tarama sırasında hata oluştu: {e}"
