@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>NmapScannerTool Orijinal Demo Test</title>
+    <style>
+        body { background-color: #1a1b26; color: #a9b1d6; font-family: 'Courier New', Courier, monospace; padding: 20px; font-size: 16px; margin: 0; }
+        .prompt { color: #9ece6a; display: inline; }
+        .info { color: #7aa2f7; }
+        .warning { color: #e0af68; }
+        .success { color: #9ece6a; }
+        .cursor { display: inline-block; width: 10px; height: 18px; background: #c0caf5; animation: blink 1s step-end infinite; vertical-align: bottom;}
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        #output { white-space: pre-wrap; line-height: 1.5; margin: 0; display: inline;}
+    </style>
+</head>
+<body>
+<div id="output"></div><span id="cursor" class="cursor"></span>
+
+<script>
+const outputElem = document.getElementById('output');
+const menu = "\n=============================================\n      SIZMA TESTİ VE ANALİZ PANELİ      \n=============================================\n1- Hızlı Tarama (-F) [Top 100 Port]\n2- Cihaz Keşfi (-sn) [Ping Scan]\n3- Servis Versiyon Tespiti (-sV)\n4- İşletim Sistemi Analizi (-O)\n5- Agresif Tarama (-A) [Hepsi Bir Arada]\n6- Zafiyet Taraması (NSE Scripts)\n7- Çıkış\n=============================================\n\nSeçiminiz (1-7): ";
+
+const flow = [
+    { text: "irem@macbook NmapScannerTool % ", type: "prompt" },
+    { text: "python3 ScannerTool.py\n", type: "typed" },
+    { text: menu, type: "output", delay: 500 },
+    
+    // HIZLI TARAMA + AKILLI ANALİZ
+    { text: "1\n", type: "typed", delay: 500 },
+    { text: "Hedef IP veya Domain: ", type: "output", delay: 100 },
+    { text: "scanme.nmap.org\n", type: "typed", delay: 600 },
+    { text: "\n[+] İşlem başlatıldı: nmap -T4 -F scanme.nmap.org\n", type: "output", delay: 300, cssClass: "info" },
+    { text: "Starting Nmap 7.94\nNmap scan report for scanme.nmap.org (45.33.32.156)\nHost is up.\nNot shown: 97 closed tcp ports\nPORT    STATE SERVICE\n22/tcp  open  ssh\n80/tcp  open  http\nNmap done: 1 IP address scanned in 0.85 seconds\n", type: "output", delay: 1500 },
+    { text: "[*] 2 adet açık port tespit edildi, analiz motoruna iletiliyor...\n", type: "output", delay: 400, cssClass: "info" },
+    { text: "\n============================================================\n🛡️  SİSTEM GÜVENLİK ANALİZİ VE TEKNİK ÖNERİLER  🛡️\n============================================================\n", type: "output", delay: 300 },
+    { text: "[!] 🔑 SSH: Uzaktan erişim güvenliği ve yetkisiz giriş denemeleri analiz edilmelidir.\n", type: "output", delay: 400, cssClass: "warning" },
+    { text: "[!] 🌐 HTTP: Web zafiyetleri (XSS, SQL Injection) ve açık dizin taraması yapılması önerilir.\n", type: "output", delay: 400, cssClass: "warning" },
+    { text: "============================================================\n", type: "output", delay: 200 },
+    { text: "[+] Rapor başarıyla oluşturuldu: taramalar/rapor_scanme.nmap.org_1.txt\n", type: "output", delay: 300, cssClass: "success" },
+    { text: "[!] Tarama işlemi tamamlandı.\n", type: "output", delay: 400, cssClass: "success" },
+    
+    // SERVIS VERSIYON TESPITI (3)
+    { text: menu, type: "output", delay: 800 },
+    { text: "3\n", type: "typed", delay: 500 },
+    { text: "Hedef IP veya Domain: ", type: "output", delay: 100 },
+    { text: "scanme.nmap.org\n", type: "typed", delay: 600 },
+    { text: "\n[+] İşlem başlatıldı: nmap -T4 -sV scanme.nmap.org\n", type: "output", delay: 300, cssClass: "info" },
+    { text: "Starting Nmap 7.94\nNmap scan report for scanme.nmap.org (45.33.32.156)\nHost is up (0.0031s latency).\nPORT    STATE SERVICE  VERSION\n22/tcp  open  ssh      OpenSSH 6.6.1p1 Ubuntu (protocol 2.0)\n80/tcp  open  http     Apache httpd 2.4.7 ((Ubuntu))\nService Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel\n\nNmap done: 1 IP address scanned in 5.85 seconds\n", type: "output", delay: 2000 },
+    { text: "[+] Rapor başarıyla oluşturuldu: taramalar/rapor_scanme.nmap.org_2.txt\n", type: "output", delay: 300, cssClass: "success" },
+    { text: "[!] Tarama işlemi tamamlandı.\n", type: "output", delay: 400, cssClass: "success" },
+
+    // ISLETIM SISTEMI ANALIZI (4)
+    { text: menu, type: "output", delay: 800 },
+    { text: "4\n", type: "typed", delay: 500 },
+    { text: "Hedef IP veya Domain: ", type: "output", delay: 100 },
+    { text: "scanme.nmap.org\n", type: "typed", delay: 600 },
+    { text: "\n[+] İşlem başlatıldı: sudo nmap -T4 -O scanme.nmap.org\n", type: "output", delay: 300, cssClass: "info" },
+    { text: "[sudo] password for irem: ", type: "output", delay: 100 },
+    { text: "********\n", type: "typed", delay: 500 },
+    { text: "Starting Nmap 7.94\nNmap scan report for scanme.nmap.org (45.33.32.156)\nHost is up (0.0028s latency).\nDevice type: general purpose\nRunning: Linux 3.X|4.X\nOS details: Linux 3.2 - 4.9\nNetwork Distance: 1 hop\n\nOS detection performed.\nNmap done: 1 IP address scanned in 4.22 seconds\n", type: "output", delay: 2000 },
+    { text: "[+] Rapor başarıyla oluşturuldu: taramalar/rapor_scanme.nmap.org_3.txt\n", type: "output", delay: 300, cssClass: "success" },
+    { text: "[!] Tarama işlemi tamamlandı.\n", type: "output", delay: 400, cssClass: "success" },
+
+    // ZAFIYET TARAMASI (6)
+    { text: menu, type: "output", delay: 800 },
+    { text: "6\n", type: "typed", delay: 500 },
+    { text: "Hedef IP veya Domain: ", type: "output", delay: 100 },
+    { text: "scanme.nmap.org\n", type: "typed", delay: 600 },
+    { text: "\n[!] scanme.nmap.org için kritik zafiyet taraması başlatılıyor...\n", type: "output", delay: 300, cssClass: "warning" },
+    { text: "Starting Nmap 7.94\nNmap scan report for scanme.nmap.org (45.33.32.156)\nHost is up (0.0035s latency).\nPORT    STATE SERVICE\n80/tcp  open  http\n| http-enum:\n|   /icons/: Potentially interesting folder w/ directory listing\n|_  /login/: Potentially interesting folder\n| http-csrf:\n|   Found the following possible CSRF vulnerabilities:\n|     Path: /admin/login.php\n|     Form id: login-form\n|_    Form action: authenticate.php\n\nNmap done: 1 IP address scanned in 12.4 seconds\n", type: "output", delay: 3000 },
+    { text: "[+] Rapor başarıyla oluşturuldu: taramalar/rapor_scanme.nmap.org_zafiyet.txt\n", type: "output", delay: 300, cssClass: "success" },
+
+    // ÇIKIŞ (7)
+    { text: menu, type: "output", delay: 1000 },
+    { text: "7\n", type: "typed", delay: 500 },
+    { text: "\n[*] Program kapatılıyor. İyi çalışmalar İrem!\n", type: "output", delay: 300 },
+    { text: "\nirem@macbook NmapScannerTool % ", type: "prompt", delay: 800 }
+];
+
+let idx = 0;
+function nextStep() {
+    if (idx >= flow.length) {
+        cursor.style.display = 'inline-block';
+        return;
+    }
+    let step = flow[idx];
+    if (step.type === "prompt") {
+        outputElem.innerHTML += `<span class="prompt">${step.text}</span>`;
+        idx++; setTimeout(nextStep, step.delay || 100);
+    } else if (step.type === "output") {
+        let text = step.text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        outputElem.innerHTML += step.cssClass ? `<span class="${step.cssClass}">${text}</span>` : text;
+        idx++; setTimeout(nextStep, step.delay || 100);
+        window.scrollTo(0, document.body.scrollHeight);
+    } else {
+        typeEffect(step.text, 0, () => {
+            idx++; setTimeout(nextStep, step.delay || 100);
+        });
+    }
+}
+function typeEffect(text, j, cb) {
+    if (j < text.length) {
+        if (text.charAt(j) === '\n') {
+            outputElem.innerHTML += '<br>';
+        } else {
+            outputElem.innerHTML += text.charAt(j);
+        }
+        window.scrollTo(0, document.body.scrollHeight);
+        setTimeout(() => typeEffect(text, j+1, cb), 50);
+    } else { cb(); }
+}
+setTimeout(nextStep, 1000);
+</script>
+</body>
+</html>
