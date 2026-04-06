@@ -66,7 +66,7 @@ Proje, sürdürülebilir kod prensiplerine uygun olarak aşağıdaki bileşenler
 Sisteminizde **Nmap**'in kurulu olması gerekmektedir:
 - **Debian / Ubuntu:** `sudo apt install nmap`
 - **MacOS:** `brew install nmap`
-- **Windows:** Nmap resmi sitesinden yükleyebilirsiniz.
+- **Windows:** [Nmap resmi sitesinden](https://nmap.org/download.html#windows) indirerek kurulumu tamamlayabilirsiniz.
 
 ### Adımlar
 
