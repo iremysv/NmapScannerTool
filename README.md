@@ -21,7 +21,7 @@ NmapScannerTool; ağ keşfi, servis analizi ve zafiyet tespiti süreçlerini mod
 ## 🎬 Demo
 Aşağıdaki animasyonda `main.py` üzerinden kurulum, yardım menüsü, hızlı tarama, cihaz keşfi ve mimari analizi (wc -l) barındıran 3.5 dakikalık kapsamlı (*comprehensive*) demo senaryosunu izleyebilirsiniz:
 
-![NmapScannerTool Demo](demo/project-demo.webm)
+![NmapScannerTool Demo](demo/demo_video.webp)
 
 ---
 
