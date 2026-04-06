@@ -18,10 +18,10 @@ NmapScannerTool; ağ keşfi, servis analizi ve zafiyet tespiti süreçlerini mod
 
 ---
 
-## 🎥 Demo
-Aşağıdaki videoda NmapScannerTool'un sahip olduğu temel tüm özelliklerin (**Hızlı Tarama**, **Servis Versiyon Tespiti**, **OS Analizi** ve **Zafiyet Taraması**) canlı testini ve analiz motorunun önerilerini izleyebilirsiniz:
+## 🎬 Demo
+Aşağıdaki animasyonda aracın dizin yapısını, hatalı komut yönetimini (edge case), hızlı taramayı ve üretilen çıktı dosyasının okunmasını barındıran kapsamlı (*comprehensive*) test senaryosunu izleyebilirsiniz:
 
-![NmapScannerTool Demo](demo/demo_video.webp)
+![NmapScannerTool Demo](demo/project-demo.webm)
 
 ---
 
