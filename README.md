@@ -19,7 +19,7 @@ NmapScannerTool; ağ keşfi, servis analizi ve zafiyet tespiti süreçlerini mod
 ---
 
 ## 🎬 Demo
-Aşağıdaki animasyonda aracın dizin yapısını, hatalı komut yönetimini (edge case), hızlı taramayı ve üretilen çıktı dosyasının okunmasını barındıran kapsamlı (*comprehensive*) test senaryosunu izleyebilirsiniz:
+Aşağıdaki animasyonda `main.py` üzerinden kurulum, yardım menüsü, hızlı tarama, cihaz keşfi ve mimari analizi (wc -l) barındıran 3.5 dakikalık kapsamlı (*comprehensive*) demo senaryosunu izleyebilirsiniz:
 
 ![NmapScannerTool Demo](demo/project-demo.webm)
 
@@ -45,11 +45,12 @@ Proje, sürdürülebilir kod prensiplerine uygun olarak aşağıdaki bileşenler
 
 | Dosya Adı | Görev |
 | :--- | :--- |
-| **ScannerTool.py** | Ana kullanıcı arayüzü ve Nmap süreç yönetimi. |
-| **analiz_motoru.py** | Port bazlı teknik risk analizi ve çözüm önerileri modülü. |
-| **ayarlar.py** | Tarama hızı ve dizin ayarlarının merkezi yönetimi. |
-| **rapor_olusturucu.py**| Tarama sonuçlarının .txt formatında raporlanması. |
-| **zafiyet_tarayici.py**| Hassas dizin ve zafiyet tarama scriptleri modülü. |
+| **main.py**          | CLI arayüzü ve merkezi uygulama girişi. |
+| **ScannerTool.py**   | Nmap süreç yönetimi ve tarama fonksiyonları. |
+| **AnalizMotoru.py**  | Port bazlı teknik risk analizi ve çözüm önerileri. |
+| **Ayarlar.py**       | Tarama hızı ve dizin ayarlarının yönetimi. |
+| **RaporOlusturucu.py**| Tarama sonuçlarının .txt formatında raporlanması. |
+| **ZafiyetTarayici.py**| Hassas dizin ve zafiyet tarama modülü. |
 | **.gitignore** | Gereksiz sistem dosyalarının izolasyonu. |
 
 ---

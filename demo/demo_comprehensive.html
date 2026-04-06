@@ -4,76 +4,98 @@
     <meta charset="utf-8">
     <title>NmapScannerTool Comprehensive Demo</title>
     <style>
-        body { background-color: #1a1b26; color: #a9b1d6; font-family: 'Courier New', Courier, monospace; padding: 20px; font-size: 16px; margin: 0; }
-        .prompt { color: #9ece6a; display: inline; }
-        .info { color: #7aa2f7; }
-        .warning { color: #e0af68; }
+        body { background-color: #1a1b26; color: #a9b1d6; font-family: 'Inter', 'Courier New', monospace; padding: 40px; font-size: 15px; margin: 0; display: flex; flex-direction: column; height: 100vh; justify-content: center; align-items: center; }
+        .window { background: #24283b; width: 85%; max-width: 900px; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); overflow: hidden; border: 1px solid #414868; }
+        .titlebar { background: #1f2335; padding: 10px 15px; display: flex; align-items: center; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
+        .red { background: #f7768e; }
+        .yellow { background: #e0af68; }
+        .green { background: #9ece6a; }
+        .title { flex-grow: 1; text-align: center; color: #565f89; font-size: 13px; font-weight: 600; margin-right: 40px; }
+        .terminal { padding: 20px; font-family: 'Fira Code', 'Courier New', monospace; height: 480px; overflow-y: auto; scrollbar-width: none; }
+        .prompt { color: #bb9af7; font-weight: bold; }
+        .dir { color: #7aa2f7; margin-left: 5px; }
+        .command { color: #c0caf5; margin-left: 10px; }
+        .info { color: #73daca; }
+        .warning { color: #ff9e64; }
         .success { color: #9ece6a; }
-        .comment { color: #565f89; font-style: italic; }
-        .cursor { display: inline-block; width: 10px; height: 18px; background: #c0caf5; animation: blink 1s step-end infinite; vertical-align: bottom;}
+        .error { color: #f7768e; }
+        .cursor { display: inline-block; width: 8px; height: 17px; background: #c0caf5; animation: blink 1s step-end infinite; vertical-align: middle;}
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        #output { white-space: pre-wrap; line-height: 1.5; margin: 0; display: inline;}
+        #output { white-space: pre-wrap; line-height: 1.6; }
     </style>
 </head>
 <body>
-<div id="output"></div><span id="cursor" class="cursor"></span>
+<div class="window">
+    <div class="titlebar">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <div class="title">zsh — nmap-scanner-tool — 80×24</div>
+    </div>
+    <div class="terminal" id="term">
+        <div id="output"></div><span id="cursor" class="cursor"></span>
+    </div>
+</div>
 
 <script>
 const outputElem = document.getElementById('output');
-const menuShort = "\n=============================================\n      SIZMA TESTİ VE ANALİZ PANELİ      \n=============================================\n1- Hızlı Tarama (-F) [Top 100 Port]\n... (Diğer seçenekler gizlendi)\n7- Çıkış\n=============================================\n\nSeçiminiz (1-7): ";
+const terminalElem = document.getElementById('term');
 
 const flow = [
-    { text: "irem@macbook NmapScannerTool % ", type: "prompt" },
-    { text: "# Adım 1: Proje yapısını inceleyelim (tree)\n", type: "typed", cssClass: "comment" },
-    { text: "irem@macbook NmapScannerTool % ", type: "prompt" },
-    { text: "tree -L 2\n", type: "typed" },
-    { text: ".\n├── AnalizMotoru.py\n├── Ayarlar.py\n├── Dockerfile\n├── LICENSE\n├── README.md\n├── RaporOlusturucu.py\n├── ScannerTool.py\n├── ZafiyetTarayici.py\n├── demo\n│   ├── demo_terminal.html\n│   └── demo_video.webp\n├── docs\n│   ├── architecture.md\n│   ├── changelog.md\n│   └── testing.md\n└── taramalar\n\n3 directories, 13 files\n", type: "output", delay: 1000 },
-    
-    { text: "\nirem@macbook NmapScannerTool % ", type: "prompt" },
-    { text: "# Adım 2: Syntax Testi (Derleme)\n", type: "typed", cssClass: "comment" },
-    { text: "irem@macbook NmapScannerTool % ", type: "prompt" },
-    { text: "python3 -m py_compile ScannerTool.py\n", type: "typed" },
-    { text: "irem@macbook NmapScannerTool % ", type: "prompt", delay: 500 },
-    
-    { text: "python3 ScannerTool.py\n", type: "typed" },
-    { text: "\n=============================================\n      SIZMA TESTİ VE ANALİZ PANELİ      \n=============================================\n1- Hızlı Tarama (-F) [Top 100 Port]\n2- Cihaz Keşfi (-sn) [Ping Scan]\n3- Servis Versiyon Tespiti (-sV)\n4- İşletim Sistemi Analizi (-O)\n5- Agresif Tarama (-A) [Hepsi Bir Arada]\n6- Zafiyet Taraması (NSE Scripts)\n7- Çıkış\n=============================================\n", type: "output", delay: 500 },
-    
-    // EDGE CASE
-    { text: "\nSeçiminiz (1-7): ", type: "output", delay: 100 },
-    { text: "9\n", type: "typed", delay: 500 },
-    { text: "Hedef IP veya Domain: ", type: "output", delay: 100 },
-    { text: "127.0.0.1\n", type: "typed", delay: 400 },
-    { text: "[-] Geçersiz seçim. Lütfen 1-7 arasında seçim yapın.\n", type: "output", delay: 300, cssClass: "warning" },
-    
-    // MAIN FEATURE
-    { text: menuShort, type: "output", delay: 800 },
-    { text: "1\n", type: "typed", delay: 400 },
-    { text: "Hedef IP veya Domain: ", type: "output", delay: 100 },
-    { text: "scanme.nmap.org\n", type: "typed", delay: 600 },
-    { text: "\n[+] İşlem başlatıldı: nmap -T4 -F scanme.nmap.org\n", type: "output", delay: 300, cssClass: "info" },
-    { text: "Starting Nmap 7.94\nNmap scan report for scanme.nmap.org (45.33.32.156)\nHost is up (0.0031s latency).\nNot shown: 97 closed tcp ports\nPORT    STATE SERVICE\n22/tcp  open  ssh\n80/tcp  open  http\nNmap done: 1 IP address scanned in 0.85 seconds\n", type: "output", delay: 2000 },
-    { text: "[*] 2 adet açık port tespit edildi, analiz motoruna iletiliyor...\n", type: "output", delay: 400, cssClass: "info" },
-    { text: "\n============================================================\n🛡️  SİSTEM GÜVENLİK ANALİZİ VE TEKNİK ÖNERİLER  🛡️\n============================================================\n", type: "output", delay: 300 },
-    { text: "[!] 🔑 SSH: Uzaktan erişim güvenliği ve yetkisiz giriş denemeleri analiz edilmelidir.\n", type: "output", delay: 400, cssClass: "warning" },
-    { text: "[!] 🌐 HTTP: Web zafiyetleri (XSS, SQL Injection) ve açık dizin taraması yapılması önerilir.\n", type: "output", delay: 400, cssClass: "warning" },
-    { text: "\n[+] Rapor başarıyla oluşturuldu: taramalar/rapor_scanme.nmap.org_detay.txt\n", type: "output", delay: 300, cssClass: "success" },
-    { text: "[!] Tarama işlemi tamamlandı.\n", type: "output", delay: 400, cssClass: "success" },
-    
-    // ÇIKIŞ
-    { text: menuShort, type: "output", delay: 800 },
-    { text: "7\n", type: "typed", delay: 500 },
-    { text: "\n[*] Program kapatılıyor. İyi çalışmalar İrem!\n", type: "output", delay: 300 },
-    
-    // RAPOR OKUMA
-    { text: "\nirem@macbook NmapScannerTool % ", type: "prompt", delay: 500 },
-    { text: "# Adım 3: Üretilen final raporun incelenmesi\n", type: "typed", cssClass: "comment" },
-    { text: "irem@macbook NmapScannerTool % ", type: "prompt" },
-    { text: "cat taramalar/rapor_scanme.nmap.org_detay.txt\n", type: "typed", delay: 500 },
-    { text: "--- NMAP TARAMA RAPORU ---\nHedef: scanme.nmap.org\nTarih: 2026-04-06_19-20\n------------------------------\nStarting Nmap 7.94\nNmap scan report for scanme.nmap.org (45.33.32.156)\nHost is up (0.0031s latency).\nPORT    STATE SERVICE\n22/tcp  open  ssh\n80/tcp  open  http\nNmap done: 1 IP address scanned in 0.85 seconds\n", type: "output", delay: 800 },
-    
-    { text: "\nirem@macbook NmapScannerTool % ", type: "prompt", delay: 500 },
-    { text: "# Video demo başarıyla tamamlandı.\n", type: "typed", delay: 200, cssClass: "success" },
-    { text: "irem@macbook NmapScannerTool % ", type: "prompt", delay: 500 }
+    // 1. SETUP
+    { text: "irem@macbook", type: "prompt" },
+    { text: "NmapScannerTool", type: "dir" },
+    { text: "pip install -r requirements.txt\n", type: "typed", delay: 2000 },
+    { text: "Collecting colorama==0.4.6\n", type: "output", delay: 1000 },
+    { text: "  Downloading colorama-0.4.6-py2.py3-none-any.whl (25 kB)\n", type: "output", delay: 1500 },
+    { text: "Installing collected packages: colorama\n", type: "output", delay: 1000 },
+    { text: "Successfully installed colorama-0.4.6\n", type: "output", delay: 2000, cssClass: "success" },
+
+    // 2. HELP
+    { text: "irem@macbook", type: "prompt" },
+    { text: "NmapScannerTool", type: "dir" },
+    { text: "python main.py --help\n", type: "typed", delay: 3000 },
+    { text: "usage: main.py [-h] (-q | -s | -v | -o | -a | -x) -t TARGET\n\nNmapScannerTool: Gelişmiş Ağ Analiz ve Güvenlik Çözümü\n\noptions:\n  -h, --help            show this help message and exit\n  -q, --quick           Hızlı Tarama (-F) [En yaygın 100 port]\n  -s, --discovery       Cihaz Keşfi (-sn) [Ping Scan]\n  -v, --version         Servis Versiyon Tespiti (-sV)\n  -o, --os              İşletim Sistemi Analizi (-O)\n  -a, --aggressive      Agresif Tarama (-A) [Hepsi Bir Arada]\n  -x, --vuln            Zafiyet Taraması (NSE Scripts)\n  -t TARGET, --target TARGET\n                        Hedef IP veya Domain adresi\n", type: "output", delay: 5000 },
+
+    // 3. EXECUTION - SUCCESSFUL DETECTION
+    { text: "irem@macbook", type: "prompt" },
+    { text: "NmapScannerTool", type: "dir" },
+    { text: "python main.py --quick --target scanme.nmap.org\n", type: "typed", delay: 3000 },
+    { text: "\n[+] Hedef: scanme.nmap.org üzerinde tarama başlatılıyor...\n", type: "output", delay: 200, cssClass: "info" },
+    { text: "[+] İşlem başlatıldı: nmap -T4 -F scanme.nmap.org\n", type: "output", delay: 1000, cssClass: "info" },
+    { text: "[...] Tarama devam ediyor, lütfen bekleyin...\n", type: "output", delay: 5000 },
+    { text: "Starting Nmap 7.94\nNmap scan report for scanme.nmap.org (45.33.32.156)\nHost is up.\nPORT    STATE SERVICE\n22/tcp  open  ssh\n80/tcp  open  http\nNmap done: 1 IP address scanned in 0.85 seconds\n", type: "output", delay: 5000 },
+    { text: "[*] 2 adet açık port tespit edildi, analiz motoruna iletiliyor...\n", type: "output", delay: 2000, cssClass: "info" },
+    { text: "[...] Risk analizi yapılıyor...\n", type: "output", delay: 3000 },
+    { text: "\n============================================================\n🛡️  SİSTEM GÜVENLİK ANALİZİ VE TEKNİK ÖNERİLER  🛡️\n============================================================\n", type: "output", delay: 1000 },
+    { text: "[!] 🔑 SSH: Uzaktan erişim güvenliği ve yetkisiz giriş denemeleri analiz edilmelidir.\n", type: "output", delay: 2000, cssClass: "warning" },
+    { text: "[!] 🌐 HTTP: Web zafiyetleri (XSS, SQL Injection) ve açık dizin taraması yapılması önerilir.\n", type: "output", delay: 2000, cssClass: "warning" },
+    { text: "============================================================\n", type: "output", delay: 1000 },
+    { text: "[+] Rapor başarıyla oluşturuldu: taramalar/rapor_scanme.nmap.org_2026-04-06.txt\n", type: "output", delay: 2000, cssClass: "success" },
+    { text: "[!] Tarama işlemi tamamlandı.\n\n", type: "output", delay: 3000, cssClass: "success" },
+
+    // 4. CLEAN RESULT
+    { text: "irem@macbook", type: "prompt" },
+    { text: "NmapScannerTool", type: "dir" },
+    { text: "python main.py --discovery --target 8.8.8.8\n", type: "typed", delay: 5000 },
+    { text: "\n[+] Hedef: 8.8.8.8 üzerinde tarama başlatılıyor...\n", type: "output", delay: 200, cssClass: "info" },
+    { text: "[+] İşlem başlatıldı: nmap -T4 -sn 8.8.8.8\n", type: "output", delay: 2000, cssClass: "info" },
+    { text: "Starting Nmap 7.94\nNmap scan report for dns.google (8.8.8.8)\nHost is up (0.015s latency).\nNmap done: 1 IP address scanned in 0.12 seconds\n", type: "output", delay: 4000 },
+    { text: "[+] Rapor başarıyla oluşturuldu: taramalar/rapor_8.8.8.8_2026-04-06.txt\n", type: "output", delay: 2000, cssClass: "success" },
+    { text: "[!] Tarama işlemi tamamlandı.\n\n", type: "output", delay: 3000, cssClass: "success" },
+
+    // 5. ARCHITECTURE
+    { text: "irem@macbook", type: "prompt" },
+    { text: "NmapScannerTool", type: "dir" },
+    { text: "wc -l *.py\n", type: "typed", delay: 5000 },
+    { text: "      29 AnalizMotoru.py\n      11 Ayarlar.py\n      23 RaporOlusturucu.py\n      71 ScannerTool.py\n      19 ZafiyetTarayici.py\n      53 main.py\n     206 total\n", type: "output", delay: 5000 },
+
+    // 6. FINISH
+    { text: "irem@macbook", type: "prompt" },
+    { text: "NmapScannerTool", type: "dir" },
+    { text: "# Proje analizi tamamlandı. Güvenli kodlama dileğiyle! 🛡️\n", type: "typed", delay: 2000, cssClass: "success" },
+    { text: "irem@macbook", type: "prompt" },
+    { text: "NmapScannerTool", type: "dir" },
+    { text: " ", type: "typed", delay: 5000 }
 ];
 
 let idx = 0;
@@ -85,30 +107,29 @@ function nextStep() {
     let step = flow[idx];
     if (step.type === "prompt") {
         outputElem.innerHTML += `<span class="prompt">${step.text}</span>`;
-        idx++; setTimeout(nextStep, step.delay || 100);
+        idx++; setTimeout(nextStep, step.delay || 50);
+    } else if (step.type === "dir") {
+        outputElem.innerHTML += `<span class="dir">${step.text} % </span>`;
+        idx++; setTimeout(nextStep, step.delay || 50);
     } else if (step.type === "output") {
         let text = step.text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
         outputElem.innerHTML += step.cssClass ? `<span class="${step.cssClass}">${text}</span>` : text;
-        idx++; setTimeout(nextStep, step.delay || 100);
-        window.scrollTo(0, document.body.scrollHeight);
+        idx++; setTimeout(nextStep, step.delay || 50);
+        terminalElem.scrollTo(0, terminalElem.scrollHeight);
     } else {
         typeEffect(step.text, 0, () => {
-            idx++; setTimeout(nextStep, step.delay || 100);
+            idx++; setTimeout(nextStep, step.delay || 50);
         });
     }
 }
 function typeEffect(text, j, cb) {
     if (j < text.length) {
-        if (text.charAt(j) === '\n') {
-            outputElem.innerHTML += '<br>';
-        } else {
-            outputElem.innerHTML += text.charAt(j);
-        }
-        window.scrollTo(0, document.body.scrollHeight);
-        setTimeout(() => typeEffect(text, j+1, cb), 40 + Math.random() * 30);
+        outputElem.innerHTML += text.charAt(j);
+        terminalElem.scrollTo(0, terminalElem.scrollHeight);
+        setTimeout(() => typeEffect(text, j+1, cb), 80);
     } else { cb(); }
 }
-setTimeout(nextStep, 1000);
+setTimeout(nextStep, 2000);
 </script>
 </body>
 </html>
