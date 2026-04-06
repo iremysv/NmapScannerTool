@@ -1,13 +1,27 @@
 # -*- coding: utf-8 -*-
 import subprocess
+import re
+import Ayarlar
+from AnalizMotoru import analiz_et
+from RaporOlusturucu import rapor_yaz
+from ZafiyetTarayici import zafiyet_tara
 
-def nmap_calistir(komut_listesi, rapor_adi):
+def nmap_calistir(komut_listesi, hedef, rapor_adi):
     try:
         print(f"\n[+] İşlem başlatıldı: {' '.join(komut_listesi)}")
         sonuc = subprocess.run(komut_listesi, capture_output=True, text=True, check=True)
-        with open(f"{rapor_adi}.log", "w", encoding="utf-8") as f:
-            f.write(sonuc.stdout)
-        print(f"[!] Tarama tamamlandı. Rapor: {rapor_adi}.log")
+        
+        # 1. Rapor oluşturucuya gönder (Tüm modlar için)
+        rapor_yaz(hedef, sonuc.stdout)
+        
+        # 2. Portları yakalayıp Analiz Motoruna gönder
+        # Örnek Regex Eşleşmesi: "80/tcp open" -> '80'
+        acik_portlar = re.findall(r'(\d+)/tcp\s+open', sonuc.stdout)
+        if acik_portlar:
+            print(f"[*] {len(acik_portlar)} adet açık port tespit edildi, analiz motoruna iletiliyor...\n")
+            analiz_et(acik_portlar)
+            
+        print(f"[!] Tarama işlemi tamamlandı.")
         return sonuc.stdout
     except Exception as e:
         print(f"[-] Hata oluştu: {e}")
@@ -31,23 +45,24 @@ def ana_menu():
             break
         hedef = input("Hedef IP veya Domain: ")
         if not hedef: continue
+        
+        # Ayarlar.py içindeki dinamik hız parametresi
+        hiz = Ayarlar.TARAMA_HIZI
+
         if secim == "1":
-            nmap_calistir(["nmap", "-F", hedef], "hizli_tarama")
+            nmap_calistir(["nmap", hiz, "-F", hedef], hedef, "hizli_tarama")
         elif secim == "2":
-            nmap_calistir(["nmap", "-sn", hedef], "cihaz_kesfi")
+            nmap_calistir(["nmap", hiz, "-sn", hedef], hedef, "cihaz_kesfi")
         elif secim == "3":
-            nmap_calistir(["nmap", "-sV", hedef], "servis_analizi")
+            nmap_calistir(["nmap", hiz, "-sV", hedef], hedef, "servis_analizi")
         elif secim == "4":
-            nmap_calistir(["sudo", "nmap", "-O", hedef], "os_analizi")
+            nmap_calistir(["sudo", "nmap", hiz, "-O", hedef], hedef, "os_analizi")
         elif secim == "5":
-            nmap_calistir(["sudo", "nmap", "-A", hedef], "agresif_tarama")
+            nmap_calistir(["sudo", "nmap", hiz, "-A", hedef], hedef, "agresif_tarama")
         elif secim == "6":
-            try:
-                from ZafiyetTarayici import zafiyet_tara
-                sonuc = zafiyet_tara(hedef)
-                print(sonuc)
-            except ImportError:
-                print("[-] Hata: ZafiyetTarayici.py bulunamadı!")
+            sonuc = zafiyet_tara(hedef)
+            rapor_yaz(f"{hedef}_zafiyet", sonuc)
+            print(sonuc)
         else:
             print("[-] Geçersiz seçim.")
 

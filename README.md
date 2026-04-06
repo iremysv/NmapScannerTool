@@ -1,6 +1,19 @@
 # 🛡️ NmapScannerTool: Gelişmiş Ağ Analiz ve Güvenlik Çözümü
 
+![Python](https://img.shields.io/badge/Python-3.11-blue?style=flat-square&logo=python) ![Nmap](https://img.shields.io/badge/Tools-Nmap-orange?style=flat-square) ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square) ![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square)
+
+**Üniversite Adı:** İstinye Üniversitesi  
+**Danışman/Eğitmen:** Keyvan Arasteh Abbasabad  
+**Geliştirici:** İrem Yasav
+
 NmapScannerTool; ağ keşfi, servis analizi ve zafiyet tespiti süreçlerini modüler bir yapıda otomatize eden Python tabanlı bir güvenlik aracıdır. Proje, sadece tarama yapmakla kalmaz; tespit edilen bulguları anlamlandırarak teknik raporlar üretir.
+
+---
+
+## 📑 İçindekiler
+- [Özellikler](#-özellikler)
+- [Proje Mimarisi](#-proje-mimarisi-modüler-yapı)
+- [Kurulum ve Kullanım](#️-kurulum-ve-kullanım)
 
 ---
 
