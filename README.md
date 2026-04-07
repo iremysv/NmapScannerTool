@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/isu_logo.svg" alt="İstinye Üniversitesi Logo" width="300">
+</p>
+
 # 🛡️ NmapScannerTool: Gelişmiş Ağ Analiz ve Güvenlik Çözümü
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue?style=flat-square&logo=python) ![Nmap](https://img.shields.io/badge/Tools-Nmap-orange?style=flat-square) ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square) ![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square)
