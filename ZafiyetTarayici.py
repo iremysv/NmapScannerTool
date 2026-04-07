@@ -1,7 +1,7 @@
 import subprocess
 
 
-def zafiyet_tara(hedef):
+def zafiyet_tara(hedef: str) -> str:
     """
     Nmap Scripting Engine (NSE) kullanarak hedefteki bilinen
     zafiyetleri (vulnerabilities) tarar.

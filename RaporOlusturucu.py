@@ -4,7 +4,7 @@ from datetime import datetime
 import Ayarlar
 
 
-def rapor_yaz(hedef, sonuc_metni):
+def rapor_yaz(hedef: str, sonuc_metni: str) -> None:
     tarih = datetime.now().strftime("%Y-%m-%d_%H-%M")
 
     # Klasör kontrolü

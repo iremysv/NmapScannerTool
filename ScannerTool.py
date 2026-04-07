@@ -7,7 +7,7 @@ from RaporOlusturucu import rapor_yaz
 from ZafiyetTarayici import zafiyet_tara
 
 
-def nmap_calistir(komut_listesi, hedef, rapor_adi):
+def nmap_calistir(komut_listesi: list[str], hedef: str, rapor_adi: str) -> str:
     try:
         print(f"\n[+] İşlem başlatıldı: {' '.join(komut_listesi)}")
         sonuc = subprocess.run(
@@ -32,7 +32,7 @@ def nmap_calistir(komut_listesi, hedef, rapor_adi):
         print(f"[-] Hata oluştu: {e}")
 
 
-def ana_menu():
+def ana_menu() -> None:
     while True:
         print("\n" + "=" * 45)
         print("      SIZMA TESTİ VE ANALİZ PANELİ      ")

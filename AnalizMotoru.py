@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def analiz_et(port_listesi):
+def analiz_et(port_listesi: list[str]) -> None:
     # Teknik analiz rehberi
     rehber = {
         "80": "🌐 HTTP: Web zafiyetleri (XSS, SQL Injection) ve açık dizin taraması yapılması önerilir.",
