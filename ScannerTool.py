@@ -6,31 +6,37 @@ from AnalizMotoru import analiz_et
 from RaporOlusturucu import rapor_yaz
 from ZafiyetTarayici import zafiyet_tara
 
+
 def nmap_calistir(komut_listesi, hedef, rapor_adi):
     try:
         print(f"\n[+] İşlem başlatıldı: {' '.join(komut_listesi)}")
-        sonuc = subprocess.run(komut_listesi, capture_output=True, text=True, check=True)
-        
+        sonuc = subprocess.run(
+            komut_listesi, capture_output=True, text=True, check=True
+        )
+
         # 1. Rapor oluşturucuya gönder (Tüm modlar için)
         rapor_yaz(hedef, sonuc.stdout)
-        
+
         # 2. Portları yakalayıp Analiz Motoruna gönder
         # Örnek Regex Eşleşmesi: "80/tcp open" -> '80'
-        acik_portlar = re.findall(r'(\d+)/tcp\s+open', sonuc.stdout)
+        acik_portlar = re.findall(r"(\d+)/tcp\s+open", sonuc.stdout)
         if acik_portlar:
-            print(f"[*] {len(acik_portlar)} adet açık port tespit edildi, analiz motoruna iletiliyor...\n")
+            print(
+                f"[*] {len(acik_portlar)} adet açık port tespit edildi, analiz motoruna iletiliyor...\n"
+            )
             analiz_et(acik_portlar)
-            
+
         print(f"[!] Tarama işlemi tamamlandı.")
         return sonuc.stdout
     except Exception as e:
         print(f"[-] Hata oluştu: {e}")
 
+
 def ana_menu():
     while True:
-        print("\n" + "="*45)
+        print("\n" + "=" * 45)
         print("      SIZMA TESTİ VE ANALİZ PANELİ      ")
-        print("="*45)
+        print("=" * 45)
         print("1- Hızlı Tarama (-F) [Top 100 Port]")
         print("2- Cihaz Keşfi (-sn) [Ping Scan]")
         print("3- Servis Versiyon Tespiti (-sV)")
@@ -38,14 +44,15 @@ def ana_menu():
         print("5- Agresif Tarama (-A) [Hepsi Bir Arada]")
         print("6- Zafiyet Taraması (NSE Scripts)")
         print("7- Çıkış")
-        print("="*45)
+        print("=" * 45)
         secim = input("\nSeçiminiz (1-7): ")
-        if secim == "7": 
+        if secim == "7":
             print("[*] Program kapatılıyor. İyi çalışmalar İrem!")
             break
         hedef = input("Hedef IP veya Domain: ")
-        if not hedef: continue
-        
+        if not hedef:
+            continue
+
         # Ayarlar.py içindeki dinamik hız parametresi
         hiz = Ayarlar.TARAMA_HIZI
 
@@ -65,6 +72,7 @@ def ana_menu():
             print(sonuc)
         else:
             print("[-] Geçersiz seçim.")
+
 
 if __name__ == "__main__":
     ana_menu()
