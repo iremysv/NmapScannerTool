@@ -1,0 +1,11 @@
+__pycache__/
+taramalar/
+.git/
+.gitignore
+.gitattributes
+demo/
+docs/
+README.md
+LICENSE
+docker-compose.yml
+Dockerfile

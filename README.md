@@ -2,6 +2,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue?style=flat-square&logo=python) ![Nmap](https://img.shields.io/badge/Tools-Nmap-orange?style=flat-square) ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square) ![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square)
 
+
 **Üniversite Adı:** İstinye Üniversitesi  
 **Danışman/Eğitmen:** Keyvan Arasteh Abbasabad  
 **Geliştirici:** İrem Yasav
@@ -91,17 +92,19 @@ Uygulama size interaktif bir menü sunacaktır. İlgili adımları takip ederek 
 
 ## 🐳 Docker ile Kullanım
 
-Uygulamayı lokal sisteminize hiçbir şey kurmadan Docker üzerinden tam izole bir ortamda da çalıştırabilirsiniz:
+Uygulamayı lokal sisteminize hiçbir şey kurmadan Docker üzerinden tam izole bir ortamda da çalıştırabilirsiniz. `docker-compose` kullanarak tarama raporlarınızın ana makinenizdeki `taramalar/` klasörüne otomatik olarak kaydedilmesini sağlayabilirsiniz.
 
-1. İmajı oluşturun:
+1. Yardım menüsünü görüntüleyin:
    ```bash
-   docker build -t nmap-scanner-tool .
+   docker-compose run --rm scanner -h
    ```
 
-2. Konteyneri başlatın:
+2. Örnek bir hedef üzerinde tarama başlatın:
    ```bash
-   docker run -it --rm nmap-scanner-tool
+   docker-compose run --rm scanner -q -t 192.168.1.1
    ```
+
+*(Not: Eski nesil interaktif menüyü kullanmak isterseniz:* `docker-compose run --rm --entrypoint python scanner ScannerTool.py` *komutunu çalıştırabilirsiniz.)*
 
 ---
 

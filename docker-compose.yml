@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  scanner:
+    build: .
+    image: nmap-scanner-tool
+    # Varsayılan argüman olarak yardım menüsünü görüntüle
+    command: ["-h"]
+    volumes:
+      # Çıktı klasörünü sunucu diskine kalıcı olarak eşle
+      - ./taramalar:/app/taramalar
