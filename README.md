@@ -80,6 +80,13 @@ Sisteminizde **Nmap**'in kurulu olması gerekmektedir:
    pip3 install -r requirements.txt
    ```
 
+### Testleri Çalıştırma (Test & Doğrulama)
+
+Projede `pytest` altyapısı mevcuttur. Test motorunu (Analiz & Raporlama modüllerinin doğrulanması) test etmek için kök dizinde şu komutu çalıştırabilirsiniz:
+```bash
+pytest
+```
+
 ---
 
 ## 💻 Kullanım
